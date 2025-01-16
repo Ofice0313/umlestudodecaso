@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: umlestudodecaso
+Bundle-SymbolicName: umlestudodecaso
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-21
+Automatic-Module-Name: umlestudodecaso
+Export-Package: com.caleb.umlestudodecaso,
+ com.caleb.umlestudodecaso.domain,
+ com.caleb.umlestudodecaso.resources
