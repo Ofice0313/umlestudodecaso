@@ -8,9 +8,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.caleb.umlestudodecaso.domain.Category;
+import com.caleb.umlestudodecaso.domain.City;
 import com.caleb.umlestudodecaso.domain.Product;
+import com.caleb.umlestudodecaso.domain.State;
 import com.caleb.umlestudodecaso.repositories.CategoryRepository;
+import com.caleb.umlestudodecaso.repositories.CityRepository;
 import com.caleb.umlestudodecaso.repositories.ProductRepository;
+import com.caleb.umlestudodecaso.repositories.StateRepository;
 
 @SpringBootApplication
 public class UmlestudodecasoApplication implements CommandLineRunner{
@@ -19,6 +23,10 @@ public class UmlestudodecasoApplication implements CommandLineRunner{
 	private CategoryRepository categoryRepository;
 	@Autowired
 	private ProductRepository productRepository;
+	@Autowired
+	private CityRepository cityRepository;
+	@Autowired
+	private StateRepository stateRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(UmlestudodecasoApplication.class, args);
@@ -43,6 +51,19 @@ public class UmlestudodecasoApplication implements CommandLineRunner{
 		
 		categoryRepository.saveAll(Arrays.asList(cat1, cat2));
 		productRepository.saveAll(Arrays.asList(p1, p2, p3));
+		
+		State state1 = new State(null, "Minais Gerais");
+		State state2 = new State(null, "São Paulo");
+		
+		City city1 = new City(null, "Uberlândia", state1);
+		City city2 = new City(null, "São Paulo", state2);
+		City city3 = new City(null, "Campinas", state2);
+		
+		state1.getCities().addAll(Arrays.asList(city1));
+		state2.getCities().addAll(Arrays.asList(city2, city3));
+		
+		stateRepository.saveAll(Arrays.asList(state1, state2));
+		cityRepository.saveAll(Arrays.asList(city1, city2, city3));
 	}
 
 }
