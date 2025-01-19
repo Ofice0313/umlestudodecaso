@@ -16,7 +16,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 
 @Entity
@@ -34,6 +33,9 @@ public class Client implements Serializable{
 	private String email;
 	private String cpfOuCnpj;
 	private Integer type;
+	
+	@OneToMany(mappedBy="client")
+	private List<Pedido> pedidos = new ArrayList<>();
 	
 	@JsonManagedReference
 	@OneToMany(mappedBy = "client")
@@ -112,6 +114,14 @@ public class Client implements Serializable{
 		this.phones = phones;
 	}
 
+	public List<Pedido> getOrders() {
+		return pedidos;
+	}
+	
+	public void setOrders(List<Pedido> pedidos) {
+		this.pedidos= pedidos;
+	}	
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
@@ -127,6 +137,7 @@ public class Client implements Serializable{
 			return false;
 		Client other = (Client) obj;
 		return Objects.equals(id, other.id);
-	}	
+	}
+
 
 }

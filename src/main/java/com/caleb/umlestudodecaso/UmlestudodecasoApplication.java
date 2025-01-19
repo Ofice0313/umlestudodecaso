@@ -1,5 +1,6 @@
 package com.caleb.umlestudodecaso;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +12,20 @@ import com.caleb.umlestudodecaso.domain.Address;
 import com.caleb.umlestudodecaso.domain.Category;
 import com.caleb.umlestudodecaso.domain.City;
 import com.caleb.umlestudodecaso.domain.Client;
+import com.caleb.umlestudodecaso.domain.Payment;
+import com.caleb.umlestudodecaso.domain.PaymentWithBillet;
+import com.caleb.umlestudodecaso.domain.PaymentWithCard;
+import com.caleb.umlestudodecaso.domain.Pedido;
 import com.caleb.umlestudodecaso.domain.Product;
 import com.caleb.umlestudodecaso.domain.State;
+import com.caleb.umlestudodecaso.domain.enums.StatePayment;
 import com.caleb.umlestudodecaso.domain.enums.TypeClient;
 import com.caleb.umlestudodecaso.repositories.AddressRepository;
 import com.caleb.umlestudodecaso.repositories.CategoryRepository;
 import com.caleb.umlestudodecaso.repositories.CityRepository;
 import com.caleb.umlestudodecaso.repositories.ClientRepository;
+import com.caleb.umlestudodecaso.repositories.PaymentRepositoriy;
+import com.caleb.umlestudodecaso.repositories.PedidoRepository;
 import com.caleb.umlestudodecaso.repositories.ProductRepository;
 import com.caleb.umlestudodecaso.repositories.StateRepository;
 
@@ -36,6 +44,10 @@ public class UmlestudodecasoApplication implements CommandLineRunner{
 	private ClientRepository clientRepository;
 	@Autowired
 	private AddressRepository addressRepository;
+	@Autowired
+	private PedidoRepository pedidoRepository;
+	@Autowired
+	private PaymentRepositoriy paymentRepositoriy;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(UmlestudodecasoApplication.class, args);
@@ -85,6 +97,22 @@ public class UmlestudodecasoApplication implements CommandLineRunner{
 		
 		clientRepository.saveAll(Arrays.asList(cli1));
 		addressRepository.saveAll(Arrays.asList(address1, address2));
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+		
+		Pedido pedido1 = new Pedido(null,sdf.parse( "30/09/2024 00:00"), cli1, address1);
+		Pedido pedido2 = new Pedido(null,sdf.parse( "10/10/2024 00:00"), cli1, address2);
+		
+		Payment payment1 = new PaymentWithCard(null, StatePayment.PAID_OFF, pedido1, 6);
+		pedido1.setPayment(payment1);
+		
+		Payment payment2 = new PaymentWithBillet(null, StatePayment.PENDENT, pedido2, sdf.parse("20/07/2024 00:00"), null);
+		pedido2.setPayment(payment2);
+		
+		cli1.getOrders().addAll(Arrays.asList(pedido1, pedido2)); 
+		
+		pedidoRepository.saveAll(Arrays.asList(pedido1, pedido2));
+		paymentRepositoriy.saveAll(Arrays.asList(payment1, payment2));
 	}
 
 }
