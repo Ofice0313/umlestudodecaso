@@ -1,6 +1,7 @@
 package com.caleb.umlestudodecaso;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import com.caleb.umlestudodecaso.domain.Address;
 import com.caleb.umlestudodecaso.domain.Category;
 import com.caleb.umlestudodecaso.domain.City;
 import com.caleb.umlestudodecaso.domain.Client;
+import com.caleb.umlestudodecaso.domain.ItemOrder;
 import com.caleb.umlestudodecaso.domain.Payment;
 import com.caleb.umlestudodecaso.domain.PaymentWithBillet;
 import com.caleb.umlestudodecaso.domain.PaymentWithCard;
@@ -24,6 +26,7 @@ import com.caleb.umlestudodecaso.repositories.AddressRepository;
 import com.caleb.umlestudodecaso.repositories.CategoryRepository;
 import com.caleb.umlestudodecaso.repositories.CityRepository;
 import com.caleb.umlestudodecaso.repositories.ClientRepository;
+import com.caleb.umlestudodecaso.repositories.ItemPedidoRepository;
 import com.caleb.umlestudodecaso.repositories.PaymentRepositoriy;
 import com.caleb.umlestudodecaso.repositories.PedidoRepository;
 import com.caleb.umlestudodecaso.repositories.ProductRepository;
@@ -48,6 +51,9 @@ public class UmlestudodecasoApplication implements CommandLineRunner{
 	private PedidoRepository pedidoRepository;
 	@Autowired
 	private PaymentRepositoriy paymentRepositoriy;
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
+	
 	
 	public static void main(String[] args) {
 		SpringApplication.run(UmlestudodecasoApplication.class, args);
@@ -113,6 +119,21 @@ public class UmlestudodecasoApplication implements CommandLineRunner{
 		
 		pedidoRepository.saveAll(Arrays.asList(pedido1, pedido2));
 		paymentRepositoriy.saveAll(Arrays.asList(payment1, payment2));
+		
+		ItemOrder io1 = new ItemOrder(pedido1, p1, 0.00, 1, 2000.00);
+		ItemOrder io2 = new ItemOrder(pedido1, p3, 0.00, 2, 80.00);
+		ItemOrder io3 = new ItemOrder(pedido2, p2, 100.00, 1, 800.00);
+		
+		pedido1.getItens().addAll(Arrays.asList(io1, io2));
+		pedido2.getItens().addAll(Arrays.asList(io3));
+		
+		p1.getItens().addAll(Arrays.asList(io1));
+		p2.getItens().addAll(Arrays.asList(io3));
+		p3.getItens().addAll(Arrays.asList(io2));
+		
+		itemPedidoRepository.saveAll(Arrays.asList(io1, io2, io3));
+		
+
 	}
 
 }

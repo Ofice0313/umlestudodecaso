@@ -2,8 +2,10 @@ package com.caleb.umlestudodecaso.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -14,6 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Product implements Serializable{
@@ -36,6 +39,9 @@ public class Product implements Serializable{
 	)
 	private List<Category> categories = new ArrayList<>();
 	
+	@OneToMany(mappedBy = "id.product")
+	private Set<ItemOrder> itens = new HashSet<>();
+	
 	public Product() {
 		
 	}
@@ -46,6 +52,14 @@ public class Product implements Serializable{
 		this.price = price;
 	}
 
+	public List<Pedido> getOrders(){
+		List<Pedido> list = new ArrayList<>();
+		for(ItemOrder x: itens) {
+			list.add(x.getPedido());
+		}
+		return list;
+	}
+	
 	public Integer getId() {
 		return id;
 	}
@@ -76,6 +90,14 @@ public class Product implements Serializable{
 
 	public void setCategories(List<Category> categories) {
 		this.categories = categories;
+	}
+	
+	public Set<ItemOrder> getItens() {
+		return itens;
+	}
+
+	public void setItens(Set<ItemOrder> itens) {
+		this.itens = itens;
 	}
 
 	@Override

@@ -2,7 +2,9 @@ package com.caleb.umlestudodecaso.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -11,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
 @Entity
@@ -23,6 +26,7 @@ public class Pedido implements Serializable{
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
+	
 	private Date moment;
 	
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "pedido")
@@ -36,6 +40,8 @@ public class Pedido implements Serializable{
 	@JoinColumn(name="address_of_delivery_id")
 	private Address addressOfDelivery;
 	
+	@OneToMany(mappedBy = "id.pedido")
+	private Set<ItemOrder> itens = new HashSet<>();
 	public Pedido() {
 		
 	}
@@ -87,6 +93,14 @@ public class Pedido implements Serializable{
 	public void setAddressOfDelivery(Address addressOfDelivery) {
 		this.addressOfDelivery = addressOfDelivery;
 	}
+	
+	public Set<ItemOrder> getItens() {
+		return itens;
+	}
+
+	public void setItens(Set<ItemOrder> itens) {
+		this.itens = itens;
+	}
 
 	@Override
 	public int hashCode() {
@@ -104,6 +118,5 @@ public class Pedido implements Serializable{
 		Pedido other = (Pedido) obj;
 		return Objects.equals(id, other.id);
 	}
-	
 	
 }
